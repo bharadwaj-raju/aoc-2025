@@ -1,4 +1,4 @@
-from ..util import readlines
+from util import readlines
 
 pos = 50
 # pos2 = 50
