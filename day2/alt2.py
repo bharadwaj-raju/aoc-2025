@@ -1,6 +1,8 @@
 from util import readtext
 
 from functools import cache
+from math import log10, ceil
+
 
 ranges_raw = [
     [*map(int, r.split("-"))] for r in readtext().replace("\n", "").split(",")
@@ -28,6 +30,22 @@ for s, e in ranges_raw:
     ranges.extend(split_range(s, e))
 
 
+# pattern repetition without string conversion and multiplication
+
+
+@cache
+def repeat_factor(k, d):
+    if k == 1:
+        return 10
+    if k == 2:
+        return 10**d + 1
+    return repeat_factor(k - 1, d) * 10**d + 1
+
+
+def repeat(n, k):
+    return n * repeat_factor(k, int(ceil(log10(n + 1))))
+
+
 @cache
 def repeaters(digits: int) -> list[int]:
     out = []
@@ -35,13 +53,12 @@ def repeaters(digits: int) -> list[int]:
         if digits % factor != 0:
             continue
         for pat in range(10 ** (factor - 1), 10**factor):
-            rp = str(pat) * (digits // factor)
-            if len(rp) == digits:
-                out.append(int(rp))
+            rp = repeat(pat, (digits // factor))
+            out.append(rp)
     return out
 
 
-ids = set()
+ids = set()  # it's faster to do the duplicate filtering here instead of in repeaters
 for r in ranges:
     d = len(str(r[0]))
     for n in repeaters(d):
