@@ -6,7 +6,7 @@ ranges = [[*map(int, r.split("-"))] for r in readtext().replace("\n", "").split(
 def made_of_patterns(n: int) -> bool:
     s = str(n)
     for factor in range(1, len(s)):
-        if s == s[:factor] * (len(s) // factor):
+        if len(s) % factor == 0 and s == s[:factor] * (len(s) // factor):
             return True
     return False
 
