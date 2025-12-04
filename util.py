@@ -8,12 +8,12 @@ from typing import Iterable, Literal, Sequence
 from itertools import cycle, groupby, islice, product
 
 
-def readlines() -> list[str]:
-    return Path(sys.argv[1]).read_text().splitlines()
-
-
 def readtext() -> str:
     return Path(sys.argv[1]).read_text()
+
+
+def readlines() -> list[str]:
+    return readtext().splitlines()
 
 
 def readgrid() -> list[list[str]]:
@@ -46,7 +46,9 @@ class vec2(NamedTuple):
 
     @staticmethod
     def all_directions() -> list["vec2"]:
-        return [vec2(x, y) for x, y in product([+1, -1, 0], repeat=2) if (x, y) != (0, 0)]
+        return [
+            vec2(x, y) for x, y in product([+1, -1, 0], repeat=2) if (x, y) != (0, 0)
+        ]
 
     @staticmethod
     def cardinal_directions() -> tuple["vec2", "vec2", "vec2", "vec2"]:
@@ -108,7 +110,13 @@ def grid_get(grid: Sequence[Sequence[str]], pos: vec2, default: str = ".") -> st
         return default
 
 
-def grid_get_vec2f(grid: Sequence[Sequence[str]], pos: vec2f, default: str = ".") -> str:
+def grid_set(grid: list[list[str]], pos: vec2, value: str):
+    grid[pos.y][pos.x] = value
+
+
+def grid_get_vec2f(
+    grid: Sequence[Sequence[str]], pos: vec2f, default: str = "."
+) -> str:
     if pos.real < 0 or pos.imag < 0:
         return default
     try:
@@ -129,7 +137,9 @@ def interleave(*iterables):
 
 
 class Node[T]:
-    def __init__(self, x: T, prev: "Node[T] | None" = None, next: "Node[T] | None" = None) -> None:
+    def __init__(
+        self, x: T, prev: "Node[T] | None" = None, next: "Node[T] | None" = None
+    ) -> None:
         self.x = x
         self.prev = prev
         self.next = next
@@ -179,7 +189,9 @@ class NodeIterator[T]:
         return x
 
 
-def display_grid(grid: list[list[str]], highlight_o: Iterable[vec2], highlight_x: Iterable[vec2]):
+def display_grid(
+    grid: list[list[str]], highlight_o: Iterable[vec2], highlight_x: Iterable[vec2]
+):
     for y, row in enumerate(grid):
         for x, cell in enumerate(row):
             if vec2(x, y) in highlight_x:
@@ -191,7 +203,9 @@ def display_grid(grid: list[list[str]], highlight_o: Iterable[vec2], highlight_x
         print()
 
 
-def display_grid_vec2f(grid: list[list[str]], highlight_o: Iterable[vec2f], highlight_x: Iterable[vec2f]):
+def display_grid_vec2f(
+    grid: list[list[str]], highlight_o: Iterable[vec2f], highlight_x: Iterable[vec2f]
+):
     for y, row in enumerate(grid):
         for x, cell in enumerate(row):
             if vec2f(x, y) in highlight_x:
