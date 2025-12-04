@@ -1,6 +1,8 @@
 from collections.abc import Generator
-from util import display_grid, readgrid, vec2, grid_get
 from collections import deque
+
+from util import readgrid, vec2, grid_get
+# from util import display_grid
 
 grid = readgrid()
 
