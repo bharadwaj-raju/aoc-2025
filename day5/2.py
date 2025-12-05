@@ -25,15 +25,18 @@ for r1, r2 in pairwise(fresh_ranges):
     # ((1, 10), (4, 5)) makes (4, 5) into (11, 5), invalidating it
     # but next iter:
     # ((11, 5), (6, 7)) -- no change even though (6, 7) should also be invalidated
-    # so we make sure to propagate the highest end-value using invalidated ranges
-    if a1 > b1 and a1 > r2[0]:
-        r2[0] = a1
+    #
+    # so what we do is that in case of r2 being invalidated, we just make it a copy of r1
+    # this lets the largest of the currently-overlapping intervals propagate correctly
+    # we'll dedup later
+    if r2[0] > b2:
+        r2[0], r2[1] = r1[0], r1[1]
 
 if len(fresh_ranges) < 100:
     print(fresh_ranges)
 
 freshcount = 0
-for fr in fresh_ranges:
+for fr in set(map(tuple, fresh_ranges)):
     a, b = fr
     freshcount += len(range(a, b + 1))
 print(freshcount)
