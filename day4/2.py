@@ -8,7 +8,7 @@ grid = readgrid()
 
 
 def roll_neighbors(grid, pos: vec2) -> Generator[vec2]:
-    return (nb for nb in pos.all_neighbors() if grid_get(grid, nb, ".") == "@")
+    return (nb for nb in pos.all_neighbors() if grid_get(grid, nb) == "@")
 
 
 def can_reach(grid, pos: vec2) -> bool:

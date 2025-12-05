@@ -10,9 +10,6 @@ for y, row in enumerate(grid):
         if cell == ".":
             continue
         pos = vec2(x, y)
-        if (
-            len([nb for nb in pos.all_neighbors() if grid_get(grid, nb, ".") == "@"])
-            < 4
-        ):
+        if len([nb for nb in pos.all_neighbors() if grid_get(grid, nb) == "@"]) < 4:
             reachable += 1
 print(reachable)
