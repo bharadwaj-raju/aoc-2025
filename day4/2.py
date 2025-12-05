@@ -2,7 +2,6 @@ from collections.abc import Generator
 from collections import deque
 
 from util import readgrid, vec2, grid_get
-# from util import display_grid
 
 grid = readgrid()
 
@@ -43,6 +42,7 @@ def dig_deeper(grid, pos: vec2) -> set[vec2]:
             candidates.extendleft(roll_neighbors(grid, c))
 
             # visualization:
+            # from util import display_grid
             # display_grid(grid, candidates, [c])
             # input()
     return removed
