@@ -38,5 +38,7 @@ if len(fresh_ranges) < 100:
 freshcount = 0
 for fr in set(map(tuple, fresh_ranges)):
     a, b = fr
-    freshcount += len(range(a, b + 1))
+    if a > b:
+        continue
+    freshcount += b - a + 1
 print(freshcount)
