@@ -110,7 +110,12 @@ def grid_get(grid: Sequence[Sequence[str]], pos: vec2, default: str = ".") -> st
 
 
 def grid_set(grid: list[list[str]], pos: vec2, value: str):
-    grid[pos.y][pos.x] = value
+    if pos.y < 0 or pos.x < 0:
+        return
+    try:
+        grid[pos.y][pos.x] = value
+    except IndexError:
+        pass
 
 
 def grid_get_vec2f(grid: Sequence[Sequence[str]], pos: vec2f, default: str = ".") -> str:
