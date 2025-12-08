@@ -8,6 +8,14 @@ from typing import Iterable, Literal, Sequence
 from itertools import cycle, groupby, islice, product
 
 
+def inputkind() -> str:
+    if "small" in sys.argv[1]:
+        return "small"
+    elif "custom" in sys.argv[1]:
+        return "custom"
+    return "full"
+
+
 def readtext() -> str:
     return Path(sys.argv[1]).read_text()
 
@@ -30,6 +38,18 @@ def sgn(x: int) -> Literal[-1, 0, +1]:
     if x < 0:
         return -1
     return +1
+
+
+class vec3(NamedTuple):
+    x: int
+    y: int
+    z: int
+
+    def euclidean_square(self, other: "vec3") -> float:
+        return (self.x - other.x) ** 2 + (self.y - other.y) ** 2 + (self.z - other.z) ** 2
+
+    def euclidean(self, other: "vec3") -> float:
+        return sqrt(self.euclidean_square(other))
 
 
 class vec2(NamedTuple):

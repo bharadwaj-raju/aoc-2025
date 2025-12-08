@@ -2,6 +2,14 @@
 name = "aoc-2025"
 version = "0.1.2025"
 requires-python = ">=3.12"
+dependencies = [
+    "rich>=14.2.0",
+]
 
 [tool.ruff]
 line-length = 119
+
+[dependency-groups]
+dev = [
+    "ipython>=9.8.0",
+]
