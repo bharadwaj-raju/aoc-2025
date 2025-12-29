@@ -1,7 +1,8 @@
+from collections import deque
 from collections.abc import Generator
 from typing import NamedTuple
 from functools import cache
-from math import sqrt
+from math import sqrt, atan2
 import sys
 from pathlib import Path
 from typing import Iterable, Literal, Sequence
@@ -24,8 +25,8 @@ def readlines() -> list[str]:
     return readtext().splitlines()
 
 
-def readgrid() -> list[list[str]]:
-    return [list(line) for line in readlines()]
+def readgrid(lines: list[str] | None) -> list[list[str]]:
+    return [list(line) for line in lines or readlines()]
 
 
 def readgroups() -> list[list[str]]:
@@ -84,6 +85,17 @@ class vec2(NamedTuple):
     def euclidean(self, other: "vec2") -> float:
         return sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
 
+    def cross(self, other: "vec2") -> int:
+        return self.x * other.y - self.y * other.x
+
+    def dot(self, other: "vec2") -> int:
+        return self.x * other.x + self.y * other.y
+
+    def angle_to(self, other: "vec2") -> float:
+        theta_self = atan2(self.y, self.x)
+        theta_other = atan2(other.y, other.x)
+        return theta_other - theta_self
+
     def manhattan(self, other: "vec2") -> int:
         return abs(self.x - other.x) + abs(self.y - other.y)
 
@@ -105,6 +117,16 @@ class vec2(NamedTuple):
 
 CARDINAL_DIRECTIONS = (vec2(+1, 0), vec2(-1, 0), vec2(0, -1), vec2(0, +1))
 ALL_DIRECTIONS = [vec2(x, y) for x, y in product([+1, -1, 0], repeat=2) if (x, y) != (0, 0)]
+COMPASS = {
+    "N": vec2(0, -1),
+    "S": vec2(0, +1),
+    "E": vec2(+1, 0),
+    "W": vec2(-1, 0),
+    "NE": vec2(+1, -1),
+    "NW": vec2(-1, -1),
+    "SE": vec2(+1, +1),
+    "SW": vec2(-1, +1),
+}
 
 vec2f = complex
 
@@ -156,6 +178,17 @@ def interleave(*iterables):
     for num_active in range(len(iterables), 0, -1):
         iterators = cycle(islice(iterators, num_active))
         yield from map(next, iterators)
+
+
+# also from recipes
+def sliding_window(iterable, n):
+    "Collect data into overlapping fixed-length chunks or blocks."
+    # sliding_window('ABCDEFG', 4) → ABCD BCDE CDEF DEFG
+    iterator = iter(iterable)
+    window = deque(islice(iterator, n - 1), maxlen=n)
+    for x in iterator:
+        window.append(x)
+        yield tuple(window)
 
 
 class Node[T]:
